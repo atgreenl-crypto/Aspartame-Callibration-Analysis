@@ -1,0 +1,1289 @@
+
+R version 4.6.1 (2026-06-24) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin23
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.83 (8608) aarch64-apple-darwin23]
+
+> demi
+Error: object 'demi' not found
+> demo
+function (topic, package = NULL, lib.loc = NULL, character.only = FALSE, 
+    verbose = getOption("verbose"), type = c("console", "html"), 
+    echo = TRUE, ask = getOption("demo.ask"), encoding = getOption("encoding")) 
+{
+    type <- match.arg(type)
+    html <- type == "html"
+    if (html) {
+        enhancedHTML <- str2logical(Sys.getenv("_R_HELP_ENABLE_ENHANCED_HTML_", 
+            "TRUE"))
+        if (!interactive() || !enhancedHTML || !requireNamespace("knitr", 
+            quietly = TRUE)) 
+            html <- FALSE
+    }
+    if (html) {
+        port <- tools::startDynamicHelp(NA)
+        if (port <= 0L) 
+            html <- FALSE
+        else {
+            if (!is.null(lib.loc)) 
+                lib.loc <- NULL
+            browser <- if (.Platform$GUI == "AQUA") {
+                get("aqua.browser", envir = as.environment("tools:RGUI"))
+            }
+            else getOption("browser")
+        }
+    }
+    paths <- find.package(package, lib.loc, verbose = verbose)
+    paths <- paths[dir.exists(file.path(paths, "demo"))]
+    if (missing(topic)) {
+        if (html) {
+            browseURL(paste0("http://127.0.0.1:", port, "/doc/html/Search?package=", 
+                paste(unique(basename(paths)), collapse = ";"), 
+                "&agrep=0&types.demo=1&pattern="), browser)
+            return(invisible())
+        }
+        db <- matrix(character(), nrow = 0L, ncol = 4L)
+        for (path in paths) {
+            entries <- NULL
+            if (file_test("-f", INDEX <- file.path(path, "Meta", 
+                "demo.rds"))) {
+                entries <- readRDS(INDEX)
+            }
+            if (NROW(entries)) {
+                db <- rbind(db, cbind(basename(path), dirname(path), 
+                  entries))
+            }
+        }
+        colnames(db) <- c("Package", "LibPath", "Item", "Title")
+        footer <- if (missing(package)) 
+            paste0("Use ", sQuote(paste("demo(package =", ".packages(all.available = TRUE))")), 
+                "\n", "to list the demos in all *available* packages.")
+        else NULL
+        y <- list(title = "Demos", header = NULL, results = db, 
+            footer = footer)
+        class(y) <- "packageIQR"
+        return(y)
+    }
+    if (!character.only) {
+        topic <- substitute(topic)
+        if (is.call(topic) && (topic[[1L]] == "::" || topic[[1L]] == 
+            ":::")) {
+            package <- as.character(topic[[2L]])
+            topic <- as.character(topic[[3L]])
+        }
+        else topic <- as.character(topic)
+    }
+    available <- character()
+    paths <- file.path(paths, "demo")
+    for (p in paths) {
+        files <- basename(tools::list_files_with_type(p, "demo"))
+        files <- files[topic == tools::file_path_sans_ext(files)]
+        if (length(files)) 
+            available <- c(available, file.path(p, files))
+    }
+    if (length(available) == 0L) 
+        stop(gettextf("No demo found for topic %s", sQuote(topic)), 
+            domain = NA)
+    if (length(available) > 1L) {
+        available <- available[1L]
+        warning(gettextf("Demo for topic %s' found more than once,\nusing the one found in %s", 
+            sQuote(topic), sQuote(dirname(available[1L]))), domain = NA)
+    }
+    pkgpath <- dirname(dirname(available))
+    if (html) {
+        browseURL(paste0("http://127.0.0.1:", port, "/library/", 
+            basename(pkgpath), "/Demo/", tools::file_path_sans_ext(basename(available))), 
+            browser)
+        return(invisible())
+    }
+    if (file.exists(file <- file.path(pkgpath, "Meta", "package.rds"))) {
+        desc <- readRDS(file)$DESCRIPTION
+        if (length(desc) == 1L) {
+            enc <- as.list(desc)[["Encoding"]]
+            !if (!is.null(enc)) 
+                encoding <- enc
+        }
+    }
+    if (ask == "default") 
+        ask <- echo && grDevices::dev.interactive(orNone = TRUE)
+    if (.Device != "null device") {
+        oldask <- grDevices::devAskNewPage(ask = ask)
+        on.exit(grDevices::devAskNewPage(oldask), add = TRUE)
+    }
+    op <- options(device.ask.default = ask)
+    on.exit(options(op), add = TRUE)
+    if (echo) {
+        cat("\n\n", "\tdemo(", topic, ")\n", "\t---- ", rep.int("~", 
+            nchar(topic, type = "w")), "\n", sep = "")
+        if (ask && interactive()) 
+            readline("\nType  <Return>\t to start : ")
+    }
+    source(available, echo = echo, max.deparse.length = Inf, 
+        keep.source = TRUE, encoding = encoding)
+}
+<bytecode: 0x14794f700>
+<environment: namespace:utils>
+> 
+> <-data frame
+Error: unexpected assignment in "<-"
+> data frame 
+Error: unexpected symbol in "data frame"
+> data.frame
+function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, 
+    fix.empty.names = TRUE, stringsAsFactors = FALSE) 
+{
+    data.row.names <- if (check.rows && is.null(row.names)) 
+        function(current, new, i) {
+            if (is.character(current)) 
+                new <- as.character(new)
+            if (is.character(new)) 
+                current <- as.character(current)
+            if (anyDuplicated(new)) 
+                return(current)
+            if (is.null(current)) 
+                return(new)
+            if (all(current == new) || all(current == "")) 
+                return(new)
+            stop(gettextf("mismatch of row names in arguments of 'data.frame', item %d", 
+                i), domain = NA)
+        }
+    else function(current, new, i) {
+        current %||% if (anyDuplicated(new)) {
+            warning(gettextf("some row.names duplicated: %s --> row.names NOT used", 
+                paste(which(duplicated(new)), collapse = ",")), 
+                domain = NA)
+            current
+        }
+        else new
+    }
+    object <- as.list(substitute(list(...)))[-1L]
+    mirn <- missing(row.names)
+    mrn <- is.null(row.names)
+    x <- list(...)
+    n <- length(x)
+    if (n < 1L) {
+        if (!mrn) {
+            if (is.object(row.names) || !is.integer(row.names)) 
+                row.names <- as.character(row.names)
+            if (anyNA(row.names)) 
+                stop("row names contain missing values")
+            if (anyDuplicated(row.names)) 
+                stop(gettextf("duplicate row.names: %s", paste(unique(row.names[duplicated(row.names)]), 
+                  collapse = ", ")), domain = NA)
+        }
+        else row.names <- integer()
+        return(structure(list(), names = character(), row.names = row.names, 
+            class = "data.frame"))
+    }
+    vnames <- names(x)
+    if (length(vnames) != n) 
+        vnames <- character(n)
+    no.vn <- !nzchar(vnames)
+    vlist <- vnames <- as.list(vnames)
+    nrows <- ncols <- integer(n)
+    for (i in seq_len(n)) {
+        xi <- if (is.character(x[[i]]) || is.list(x[[i]])) 
+            as.data.frame(x[[i]], optional = TRUE, stringsAsFactors = stringsAsFactors)
+        else as.data.frame(x[[i]], optional = TRUE)
+        nrows[i] <- .row_names_info(xi)
+        ncols[i] <- length(xi)
+        namesi <- names(xi)
+        if (ncols[i] > 1L) {
+            if (length(namesi) == 0L) 
+                namesi <- seq_len(ncols[i])
+            vnames[[i]] <- if (no.vn[i]) 
+                namesi
+            else paste(vnames[[i]], namesi, sep = ".")
+        }
+        else if (length(namesi)) {
+            vnames[[i]] <- namesi
+        }
+        else if (fix.empty.names && no.vn[[i]]) {
+            tmpname <- deparse(object[[i]], nlines = 1L)[1L]
+            if (startsWith(tmpname, "I(") && endsWith(tmpname, 
+                ")")) {
+                ntmpn <- nchar(tmpname, "c")
+                tmpname <- substr(tmpname, 3L, ntmpn - 1L)
+            }
+            vnames[[i]] <- tmpname
+        }
+        if (mirn && nrows[i] > 0L) {
+            rowsi <- attr(xi, "row.names")
+            if (any(nzchar(rowsi))) 
+                row.names <- data.row.names(row.names, rowsi, 
+                  i)
+        }
+        nrows[i] <- abs(nrows[i])
+        vlist[[i]] <- xi
+    }
+    nr <- max(nrows)
+    for (i in seq_len(n)[nrows < nr]) {
+        xi <- vlist[[i]]
+        if (nrows[i] > 0L && (nr%%nrows[i] == 0L)) {
+            xi <- unclass(xi)
+            fixed <- TRUE
+            for (j in seq_along(xi)) {
+                xi1 <- xi[[j]]
+                if (is.vector(xi1) || is.factor(xi1)) 
+                  xi[[j]] <- rep(xi1, length.out = nr)
+                else if (is.character(xi1) && inherits(xi1, "AsIs")) 
+                  xi[[j]] <- structure(rep(xi1, length.out = nr), 
+                    class = class(xi1))
+                else if (inherits(xi1, "Date") || inherits(xi1, 
+                  "POSIXct")) 
+                  xi[[j]] <- rep(xi1, length.out = nr)
+                else {
+                  fixed <- FALSE
+                  break
+                }
+            }
+            if (fixed) {
+                vlist[[i]] <- xi
+                next
+            }
+        }
+        stop(gettextf("arguments imply differing number of rows: %s", 
+            paste(unique(nrows), collapse = ", ")), domain = NA)
+    }
+    value <- unlist(vlist, recursive = FALSE, use.names = FALSE)
+    vnames <- as.character(unlist(vnames[ncols > 0L]))
+    if (fix.empty.names && any(noname <- !nzchar(vnames))) 
+        vnames[noname] <- paste0("Var.", seq_along(vnames))[noname]
+    if (check.names) {
+        if (fix.empty.names) 
+            vnames <- make.names(vnames, unique = TRUE)
+        else {
+            nz <- nzchar(vnames)
+            vnames[nz] <- make.names(vnames[nz], unique = TRUE)
+        }
+    }
+    names(value) <- vnames
+    if (!mrn) {
+        if (length(row.names) == 1L && nr != 1L) {
+            if (is.character(row.names)) 
+                row.names <- match(row.names, vnames, 0L)
+            if (length(row.names) != 1L || row.names < 1L || 
+                row.names > length(vnames)) 
+                stop("'row.names' should specify one of the variables")
+            i <- row.names
+            row.names <- value[[i]]
+            value <- value[-i]
+        }
+        else if (!is.null(row.names) && length(row.names) != 
+            nr) 
+            stop("row names supplied are of the wrong length")
+    }
+    else if (!is.null(row.names) && length(row.names) != nr) {
+        warning("row names were found from a short variable and have been discarded")
+        row.names <- NULL
+    }
+    class(value) <- "data.frame"
+    if (is.null(row.names)) 
+        attr(value, "row.names") <- .set_row_names(nr)
+    else {
+        if (is.object(row.names) || !is.integer(row.names)) 
+            row.names <- as.character(row.names)
+        if (anyNA(row.names)) 
+            stop("row names contain missing values")
+        if (anyDuplicated(row.names)) 
+            stop(gettextf("duplicate row.names: %s", paste(unique(row.names[duplicated(row.names)]), 
+                collapse = ", ")), domain = NA)
+        row.names(value) <- row.names
+    }
+    value
+}
+<bytecode: 0x1478edb48>
+<environment: namespace:base>
+> # Absorbance vector 
+> A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+> 
+> #Concentration vector
+> C <- c(0.5, 1, 2, 4, 6, 8, 10)
+> 
+> # Now let's plot it
+> # 2. Basic scatter plot
+> plot(C, A, type = "l", col = "blue", lwd = 2, 
++      main = "Line Plot of Two Vectors", xlab = "X Axis", ylab = "Y Axis")
+> # Absorbance vector 
+> > A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> > 
+Error: unexpected '>' in ">"
+> > #Concentration vector
+Error: unexpected '>' in ">"
+> > C <- c(0.5, 1, 2, 4, 6, 8, 10)
+Error: unexpected '>' in ">"
+> > 
+Error: unexpected '>' in ">"
+> > # Now let's plot it
+Error: unexpected '>' in ">"
+> > # 2. Basic scatter plot
+Error: unexpected '>' in ">"
+> > plot(C, A, type = "l", col = "blue", lwd = 2, 
+Error: unexpected '>' in ">"
+> +      main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+Error: unexpected ',' in "+      main = "Line Plot of Two Vectors","
+> > 
+Error: unexpected '>' in ">"
+> # Absorbance vector 
+> > A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> > 
+Error: unexpected '>' in ">"
+> > #Concentration vector
+Error: unexpected '>' in ">"
+> > C <- c(0.5, 1, 2, 4, 6, 8, 10)
+Error: unexpected '>' in ">"
+> > 
+Error: unexpected '>' in ">"
+> > # Now let's plot it
+Error: unexpected '>' in ">"
+> > # 2. Basic scatter plot
+Error: unexpected '>' in ">"
+> > plot(C, A, type = "l", col = "blue", lwd = 2, 
+Error: unexpected '>' in ">"
+> +      main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+Error: unexpected ',' in "+      main = "Line Plot of Two Vectors","
+> 
+>  # Absorbance vector 
+> > A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> > 
+Error: unexpected '>' in ">"
+> > #Concentration vector
+Error: unexpected '>' in ">"
+> > C <- c(0.5, 1, 2, 4, 6, 8, 10)
+Error: unexpected '>' in ">"
+> > 
+Error: unexpected '>' in ">"
+> > # Now let's plot it
+Error: unexpected '>' in ">"
+> > # 2. Basic scatter plot
+Error: unexpected '>' in ">"
+> > plot(C, A, type = "l", col = "blue", lwd = 2, 
+Error: unexpected '>' in ">"
+>       main = "Line Plot of Two Vectors", xlab = "X Axis", ylab = "Y Axis")
+Error: unexpected ',' in "      main = "Line Plot of Two Vectors","
+> > # Absorbance vector 
+Error: unexpected '>' in ">"
+> >  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> 
+> # Absorbance vector 
+> A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+> #Concentration vector
+> C <- c(0.5, 1, 2, 4, 6, 8, 10)
+> 
+> # Now let's plot it
+> # 2. Basic scatter plot
+> plot(C, A, type = "l", col = "blue", lwd = 2, 
++      main = "Line Plot of Two Vectors", xlab = "X Axis", ylab = "Y Axis")
+> 
+> 
+> 
+> # Absorbance vector 
+> > A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> > #Concentration vector
+Error: unexpected '>' in ">"
+> > C <- c(0.5, 1, 2, 4, 6, 8, 10)
+Error: unexpected '>' in ">"
+> > 
+Error: unexpected '>' in ">"
+> > # Now let's plot it
+Error: unexpected '>' in ">"
+> > # 2. Basic scatter plot
+Error: unexpected '>' in ">"
+> > plot(C, A, type = "l", col = "blue", lwd = 2, 
+Error: unexpected '>' in ">"
+> +      main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+Error: unexpected ',' in "+      main = "Line Plot of Two Vectors","
+> 
+> # Absorbance vector  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+> #Concentration vector C <- c(0.5, 1, 2, 4, 6, 8, 10)
+> # Now let's plot it # 2. Basic scatter plot plot(C, A, type = "l", col = "blue", lwd = 2,       main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+> 
+> 
+> 
+> data.frame
+function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, 
+    fix.empty.names = TRUE, stringsAsFactors = FALSE) 
+{
+    data.row.names <- if (check.rows && is.null(row.names)) 
+        function(current, new, i) {
+            if (is.character(current)) 
+                new <- as.character(new)
+            if (is.character(new)) 
+                current <- as.character(current)
+            if (anyDuplicated(new)) 
+                return(current)
+            if (is.null(current)) 
+                return(new)
+            if (all(current == new) || all(current == "")) 
+                return(new)
+            stop(gettextf("mismatch of row names in arguments of 'data.frame', item %d", 
+                i), domain = NA)
+        }
+    else function(current, new, i) {
+        current %||% if (anyDuplicated(new)) {
+            warning(gettextf("some row.names duplicated: %s --> row.names NOT used", 
+                paste(which(duplicated(new)), collapse = ",")), 
+                domain = NA)
+            current
+        }
+        else new
+    }
+    object <- as.list(substitute(list(...)))[-1L]
+    mirn <- missing(row.names)
+    mrn <- is.null(row.names)
+    x <- list(...)
+    n <- length(x)
+    if (n < 1L) {
+        if (!mrn) {
+            if (is.object(row.names) || !is.integer(row.names)) 
+                row.names <- as.character(row.names)
+            if (anyNA(row.names)) 
+                stop("row names contain missing values")
+            if (anyDuplicated(row.names)) 
+                stop(gettextf("duplicate row.names: %s", paste(unique(row.names[duplicated(row.names)]), 
+                  collapse = ", ")), domain = NA)
+        }
+        else row.names <- integer()
+        return(structure(list(), names = character(), row.names = row.names, 
+            class = "data.frame"))
+    }
+    vnames <- names(x)
+    if (length(vnames) != n) 
+        vnames <- character(n)
+    no.vn <- !nzchar(vnames)
+    vlist <- vnames <- as.list(vnames)
+    nrows <- ncols <- integer(n)
+    for (i in seq_len(n)) {
+        xi <- if (is.character(x[[i]]) || is.list(x[[i]])) 
+            as.data.frame(x[[i]], optional = TRUE, stringsAsFactors = stringsAsFactors)
+        else as.data.frame(x[[i]], optional = TRUE)
+        nrows[i] <- .row_names_info(xi)
+        ncols[i] <- length(xi)
+        namesi <- names(xi)
+        if (ncols[i] > 1L) {
+            if (length(namesi) == 0L) 
+                namesi <- seq_len(ncols[i])
+            vnames[[i]] <- if (no.vn[i]) 
+                namesi
+            else paste(vnames[[i]], namesi, sep = ".")
+        }
+        else if (length(namesi)) {
+            vnames[[i]] <- namesi
+        }
+        else if (fix.empty.names && no.vn[[i]]) {
+            tmpname <- deparse(object[[i]], nlines = 1L)[1L]
+            if (startsWith(tmpname, "I(") && endsWith(tmpname, 
+                ")")) {
+                ntmpn <- nchar(tmpname, "c")
+                tmpname <- substr(tmpname, 3L, ntmpn - 1L)
+            }
+            vnames[[i]] <- tmpname
+        }
+        if (mirn && nrows[i] > 0L) {
+            rowsi <- attr(xi, "row.names")
+            if (any(nzchar(rowsi))) 
+                row.names <- data.row.names(row.names, rowsi, 
+                  i)
+        }
+        nrows[i] <- abs(nrows[i])
+        vlist[[i]] <- xi
+    }
+    nr <- max(nrows)
+    for (i in seq_len(n)[nrows < nr]) {
+        xi <- vlist[[i]]
+        if (nrows[i] > 0L && (nr%%nrows[i] == 0L)) {
+            xi <- unclass(xi)
+            fixed <- TRUE
+            for (j in seq_along(xi)) {
+                xi1 <- xi[[j]]
+                if (is.vector(xi1) || is.factor(xi1)) 
+                  xi[[j]] <- rep(xi1, length.out = nr)
+                else if (is.character(xi1) && inherits(xi1, "AsIs")) 
+                  xi[[j]] <- structure(rep(xi1, length.out = nr), 
+                    class = class(xi1))
+                else if (inherits(xi1, "Date") || inherits(xi1, 
+                  "POSIXct")) 
+                  xi[[j]] <- rep(xi1, length.out = nr)
+                else {
+                  fixed <- FALSE
+                  break
+                }
+            }
+            if (fixed) {
+                vlist[[i]] <- xi
+                next
+            }
+        }
+        stop(gettextf("arguments imply differing number of rows: %s", 
+            paste(unique(nrows), collapse = ", ")), domain = NA)
+    }
+    value <- unlist(vlist, recursive = FALSE, use.names = FALSE)
+    vnames <- as.character(unlist(vnames[ncols > 0L]))
+    if (fix.empty.names && any(noname <- !nzchar(vnames))) 
+        vnames[noname] <- paste0("Var.", seq_along(vnames))[noname]
+    if (check.names) {
+        if (fix.empty.names) 
+            vnames <- make.names(vnames, unique = TRUE)
+        else {
+            nz <- nzchar(vnames)
+            vnames[nz] <- make.names(vnames[nz], unique = TRUE)
+        }
+    }
+    names(value) <- vnames
+    if (!mrn) {
+        if (length(row.names) == 1L && nr != 1L) {
+            if (is.character(row.names)) 
+                row.names <- match(row.names, vnames, 0L)
+            if (length(row.names) != 1L || row.names < 1L || 
+                row.names > length(vnames)) 
+                stop("'row.names' should specify one of the variables")
+            i <- row.names
+            row.names <- value[[i]]
+            value <- value[-i]
+        }
+        else if (!is.null(row.names) && length(row.names) != 
+            nr) 
+            stop("row names supplied are of the wrong length")
+    }
+    else if (!is.null(row.names) && length(row.names) != nr) {
+        warning("row names were found from a short variable and have been discarded")
+        row.names <- NULL
+    }
+    class(value) <- "data.frame"
+    if (is.null(row.names)) 
+        attr(value, "row.names") <- .set_row_names(nr)
+    else {
+        if (is.object(row.names) || !is.integer(row.names)) 
+            row.names <- as.character(row.names)
+        if (anyNA(row.names)) 
+            stop("row names contain missing values")
+        if (anyDuplicated(row.names)) 
+            stop(gettextf("duplicate row.names: %s", paste(unique(row.names[duplicated(row.names)]), 
+                collapse = ", ")), domain = NA)
+        row.names(value) <- row.names
+    }
+    value
+}
+<bytecode: 0x1478edb48>
+<environment: namespace:base>
+> # Absorbance vector  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+> #Concentration vector C <- c(0.5, 1, 2, 4, 6, 8, 10)
+> # Now let's plot it # 2. Basic scatter plot plot(C, A, type = "l", col = "blue", lwd = 2,       main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+> 
+> 
+> > # Absorbance vector  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> > #Concentration vector C <- c(0.5, 1, 2, 4, 6, 8, 10)
+Error: unexpected '>' in ">"
+> > # Now let's plot it # 2. Basic scatter plot plot(C, A, type = "l", col = "blue", lwd = 2,       main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+Error: unexpected '>' in ">"
+> > # Absorbance vector  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> > #Concentration vector C <- c(0.5, 1, 2, 4, 6, 8, 10)
+Error: unexpected '>' in ">"
+> > # Now let's plot it # 2. Basic scatter plot plot(C, A, type = "l", col = "blue", lwd = 2,       main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance
+Error: unexpected '>' in ">"
+>  # Absorbance vector  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+> > #Concentration vector C <- c(0.5, 1, 2, 4, 6, 8, 10)
+Error: unexpected '>' in ">"
+> > # Now let's plot it # 2. Basic scatter plot plot(C, A, type = "l", col = "blue", lwd = 2,       main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+Error: unexpected '>' in ">"
+>  # Absorbance vector  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+> > #Concentration vector C <- c(0.5, 1, 2, 4, 6, 8, 10) # 2. Basic scatter plot plot(C, A, type = "l", col = "blue", lwd = 2,       main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+Error: unexpected '>' in ">"
+> > # Absorbance vector  A <- c(0.149, 0.256, 0.26, 0.54, 1.118, 1.344, 1.713)
+Error: unexpected '>' in ">"
+> > #Concentration vector C <- c(0.5, 1, 2, 4, 6, 8, 10) # 2. Basic scatter plot plot(C, A, type = "l", col = "blue", lwd = 2,       main = "Line Plot of Two Vectors", xlab = "Molarity mM", ylab = "Absorbance")
+Error: unexpected '>' in ">"
+> # ============================================================
+> # FIGURE 2: FOUR INDEPENDENT ASPARTAME CALIBRATION TRIALS
+> # ============================================================
+> 
+> # Assign a different color to each experiment
+> group_colors <- c(
++   "Group 1" = "black",
++   "Group 2" = "blue",
++   "Group 3" = "darkgreen",
++   "Group 4" = "darkorange"
++ )
+> 
+> # Plot all 28 individual measurements
+> plot(
++   df$Concentration,
++   df$Absorbance,
++   col = group_colors[df$Group],
++   pch = 19,
++   cex = 1.3,
++   main = "UV-Vis Calibration of Aspartame: Four Independent Trials",
++   xlab = "Aspartame Concentration (M)",
++   ylab = "Absorbance",
++   xlim = c(0, 0.011),
++   ylim = c(0, 1.9)
++ )
+Error in df$Concentration : object of type 'closure' is not subsettable
+> 
+> # Add global linear regression line
+> abline(model, col = "red", lwd = 2, lty = 2)
+Error: object 'model' not found
+> 
+> # Add legend identifying each independent experiment
+> legend(
++   "topleft",
++   legend = c(
++     "Experiment 1",
++     "Experiment 2",
++     "Experiment 3",
++     "Experiment 4",
++     "Linear Regression"
++   ),
++   col = c(
++     "black",
++     "blue",
++     "darkgreen",
++     "darkorange",
++     "red"
++   ),
++   pch = c(19, 19, 19, 19, NA),
++   lty = c(NA, NA, NA, NA, 2),
++   lwd = c(NA, NA, NA, NA, 2),
++   bty = "n",
++   cex = 0.85
++ )
+Error in (function (s, units = "user", cex = NULL, font = NULL, vfont = NULL,  : 
+  plot.new has not been called yet
+> 
+> # Display regression equation and R-squared
+> legend(
++   "bottomright",
++   legend = c(
++     sprintf("A = %.2fC + %.4f", slope, intercept),
++     sprintf("R² = %.4f", r_squared)
++   ),
++   bty = "n",
++   cex = 0.9
++ )
+Error: object 'slope' not found
+> 
+> grid()
+Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...) : 
+  plot.new has not been called yet
+> 
+> 
+> 
+> # ============================================================
+> # FIGURE 2: ORIGINAL CALIBRATION CURVE (ALL 28 POINTS)
+> # ============================================================
+> 
+> # Assign colors to each independent experiment
+> group_colors <- c(
++   "Group 1" = "black",
++   "Group 2" = "blue",
++   "Group 3" = "darkgreen",
++   "Group 4" = "darkorange"
++ )
+> 
+> # Original regression
+> model_original <- lm(Absorbance ~ Concentration, data = df)
+Error in model.frame.default(formula = Absorbance ~ Concentration, data = df,  : 
+  'data' must be a data.frame, environment, or list
+> 
+> slope_original <- coef(model_original)[2]
+Error: object 'model_original' not found
+> intercept_original <- coef(model_original)[1]
+Error: object 'model_original' not found
+> r2_original <- summary(model_original)$r.squared
+Error: object 'model_original' not found
+> 
+> # Plot original data
+> plot(
++   df$Concentration,
++   df$Absorbance,
++   col = group_colors[df$Group],
++   pch = 19,
++   cex = 1.3,
++   main = "UV-Vis Calibration of Aspartame: All Experimental Trials",
++   xlab = "Aspartame Concentration (M)",
++   ylab = "Absorbance",
++   xlim = c(0, 0.011),
++   ylim = c(0, 1.9)
++ )
+Error in df$Concentration : object of type 'closure' is not subsettable
+> 
+> # Regression line
+> abline(model_original, col = "red", lwd = 2, lty = 2)
+Error: object 'model_original' not found
+> 
+> # Legend
+> legend(
++   "topleft",
++   legend = c(
++     "Experiment 1",
++     "Experiment 2",
++     "Experiment 3",
++     "Experiment 4",
++     "Linear Regression"
++   ),
++   col = c("black", "blue", "darkgreen", "darkorange", "red"),
++   pch = c(19, 19, 19, 19, NA),
++   lty = c(NA, NA, NA, NA, 2),
++   bty = "n",
++   cex = 0.85
++ )
+Error in (function (s, units = "user", cex = NULL, font = NULL, vfont = NULL,  : 
+  plot.new has not been called yet
+> 
+> # Regression equation
+> legend(
++   "bottomright",
++   legend = c(
++     sprintf("A = %.2fC + %.4f", slope_original, intercept_original),
++     sprintf("R² = %.4f", r2_original)
++   ),
++   bty = "n"
++ )
+Error: object 'slope_original' not found
+> 
+> grid()
+Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...) : 
+  plot.new has not been called yet
+> # ============================================================
+> # UV-VIS CALIBRATION CURVE OF ASPARTAME
+> # FOUR INDEPENDENT EXPERIMENTS
+> # ============================================================
+> 
+> # 1. Enter experimental data
+> concentration_M <- c(0.5, 1, 2, 4, 6, 8, 10) / 1000
+> 
+> group1 <- c(0.149, 0.256, 0.260, 0.540, 1.118, 1.344, 1.713)
+> group2 <- c(0.121, 0.188, 0.342, 0.494, 0.677, 0.832, 0.920)
+> group3 <- c(0.136, 0.140, 0.348, 0.495, 0.666, 0.847, 0.928)
+> group4 <- c(0.077, 0.133, 0.236, 0.473, 0.675, 0.828, 0.940)
+> 
+> # 2. Combine all measurements
+> df <- data.frame(
++   Concentration = rep(concentration_M, times = 4),
++   Absorbance = c(group1, group2, group3, group4),
++   Group = rep(
++     c("Experiment 1", "Experiment 2",
++       "Experiment 3", "Experiment 4"),
++     each = 7
++   )
++ )
+> 
+> # 3. Remove three outliers from Experiment 1
+> # Measurements at 6, 8, and 10 mM
+> df_clean <- df[-c(5, 6, 7), ]
+> 
+> # 4. Calculate cleaned linear regression
+> model_clean <- lm(
++   Absorbance ~ Concentration,
++   data = df_clean
++ )
+> 
+> slope_clean <- coef(model_clean)[2]
+> intercept_clean <- coef(model_clean)[1]
+> r2_clean <- summary(model_clean)$r.squared
+> 
+> # 5. Assign different colors to each experiment
+> group_colors <- c(
++   "Experiment 1" = "black",
++   "Experiment 2" = "blue",
++   "Experiment 3" = "darkgreen",
++   "Experiment 4" = "darkorange"
++ )
+> 
+> # 6. Plot cleaned calibration curve
+> plot(
++   df_clean$Concentration,
++   df_clean$Absorbance,
++   col = group_colors[df_clean$Group],
++   pch = 19,
++   cex = 1.3,
++   main = "UV-Vis Calibration Curve of Aspartame: Four Independent Trials",
++   xlab = "Aspartame Concentration (M)",
++   ylab = "Absorbance",
++   xlim = c(0, 0.011),
++   ylim = c(0, 1.2)
++ )
+> 
+> # 7. Add regression line
+> abline(model_clean, col = "red", lwd = 2, lty = 2)
+> 
+> # 8. Label each experiment
+> legend(
++   "topleft",
++   legend = c(
++     "Experiment 1",
++     "Experiment 2",
++     "Experiment 3",
++     "Experiment 4",
++     "Linear Regression"
++   ),
++   col = c(
++     "black", "blue", "darkgreen", "darkorange", "red"
++   ),
++   pch = c(19, 19, 19, 19, NA),
++   lty = c(NA, NA, NA, NA, 2),
++   lwd = c(NA, NA, NA, NA, 2),
++   bty = "n",
++   cex = 0.85
++ )
+> 
+> # 9. Display regression equation and R-squared
+> legend(
++   "bottomright",
++   legend = c(
++     sprintf("A = %.2fC + %.4f",
++             slope_clean, intercept_clean),
++     sprintf("R² = %.4f", r2_clean)
++   ),
++   bty = "n",
++   cex = 0.9
++ )
+> 
+> grid()
+> 
+> # 10. Print regression statistics
+> cat("\n=== CLEANED CALIBRATION RESULTS ===\n")
+
+=== CLEANED CALIBRATION RESULTS ===
+> cat(sprintf("Slope: %.4f M^-1\n", slope_clean))
+Slope: 87.9423 M^-1
+> cat(sprintf("Intercept: %.5f\n", intercept_clean))
+Intercept: 0.10924
+> cat(sprintf("R²: %.5f\n", r2_clean))
+R²: 0.97496
+> cat(sprintf(
++   "Standard Error of Slope: %.4f\n",
++   summary(model_clean)$coefficients[2, 2]
++ ))
+Standard Error of Slope: 2.9386
+> cat(sprintf(
++   "Standard Error of Regression: %.5f\n",
++   summary(model_clean)$sigma
++ ))
+Standard Error of Regression: 0.04818
+> 
+> # ============================================================
+> # CALIBRATION CURVE OF KNOWN ASPARTAME CONCENTRATIONS
+> # ============================================================
+> 
+> # 1. Enter experimental data
+> concentration_M <- c(0.5, 1, 2, 4, 6, 8, 10) / 1000
+> 
+> absorbance <- c(
++   0.149, 0.256, 0.260, 0.540,
++   1.118, 1.344, 1.713
++ )
+> 
+> # 2. Create data frame
+> df <- data.frame(
++   Concentration = concentration_M,
++   Absorbance = absorbance
++ )
+> 
+> # 3. Calculate linear regression
+> model <- lm(Absorbance ~ Concentration, data = df)
+> 
+> model_summary <- summary(model)
+> 
+> slope <- coef(model)[2]
+> intercept <- coef(model)[1]
+> 
+> # Coefficient of determination
+> r_squared <- model_summary$r.squared
+> 
+> # Regression statistics
+> se_slope <- model_summary$coefficients[2, 2]
+> se_reg <- model_summary$sigma
+> 
+> # Molar absorptivity for a 1 cm cuvette
+> epsilon <- slope / 1.00
+> 
+> # ============================================================
+> # 4. GENERATE CALIBRATION CURVE
+> # ============================================================
+> 
+> plot(
++   df$Concentration,
++   df$Absorbance,
++   pch = 19,
++   col = "blue",
++   cex = 1.0,
++   main = "Calibration Curve of Known Aspartame Concentrations",
++   xlab = "Aspartame Concentration (M)",
++   ylab = "Absorbance",
++   xlim = c(0, 0.011),
++   ylim = c(0, 1.9)
++ )
+> 
+> # 5. Add regression line
+> abline(
++   model,
++   col = "red",
++   lwd = 2
++ )
+> 
+> # 6. Display regression equation and R²
+> legend(
++   "topleft",
++   legend = c(
++     sprintf("A = %.2fC + %.4f", slope, intercept),
++     sprintf("R² = %.4f", r_squared)
++   ),
++   bty = "n",
++   cex = 0.9
++ )
+> 
+> # 7. Add grid
+> grid()
+> 
+> # ============================================================
+> # 8. PRINT REGRESSION STATISTICS
+> # ============================================================
+> 
+> cat("\n=== ASPARTAME CALIBRATION RESULTS ===\n")
+
+=== ASPARTAME CALIBRATION RESULTS ===
+> 
+> cat(sprintf("Slope: %.4f M^-1\n", slope))
+Slope: 168.4340 M^-1
+> cat(sprintf("Intercept: %.5f\n", intercept))
+Intercept: 0.01062
+> cat(sprintf("R²: %.5f\n", r_squared))
+R²: 0.97949
+> 
+> cat(sprintf(
++   "Molar Absorptivity: %.4f M^-1 cm^-1\n",
++   epsilon
++ ))
+Molar Absorptivity: 168.4340 M^-1 cm^-1
+> 
+> cat(sprintf(
++   "Standard Error of Slope: %.4f\n",
++   se_slope
++ ))
+Standard Error of Slope: 10.9011
+> 
+> cat(sprintf(
++   "Standard Error of Regression: %.5f\n",
++   se_reg
++ ))
+Standard Error of Regression: 0.09720
+> 
+> # ============================================================
+> # ASPARTAME CALIBRATION CURVE AND EQUAL PACKET ANALYSIS
+> # ============================================================
+> 
+> # 1. ENTER CALIBRATION DATA
+> 
+> # Known aspartame concentrations (M)
+> concentration_M <- c(0.5, 1, 2, 4, 6, 8, 10) / 1000
+> 
+> # Absorbance measurements from four experiments
+> group1 <- c(0.149, 0.256, 0.260, 0.540,
++             1.118, 1.344, 1.713)
+> 
+> group2 <- c(0.121, 0.188, 0.342, 0.494,
++             0.677, 0.832, 0.920)
+> 
+> group3 <- c(0.136, 0.140, 0.348, 0.495,
++             0.666, 0.847, 0.928)
+> 
+> group4 <- c(0.077, 0.133, 0.236, 0.473,
++             0.675, 0.828, 0.940)
+> 
+> 
+> # 2. CREATE DATA FRAME
+> 
+> df <- data.frame(
++   Concentration = rep(concentration_M, times = 4),
++   Absorbance = c(group1, group2, group3, group4),
++   Group = rep(
++     c("Experiment 1", "Experiment 2",
++       "Experiment 3", "Experiment 4"),
++     each = 7
++   )
++ )
+> 
+> 
+> # 3. REMOVE PREVIOUSLY IDENTIFIED OUTLIERS
+> 
+> # Remove Experiment 1 values at 6, 8, and 10 mM
+> df_clean <- df[-c(5, 6, 7), ]
+> 
+> 
+> # 4. CALCULATE MEAN ABSORBANCE AND SEM
+> 
+> mean_data <- aggregate(
++   Absorbance ~ Concentration,
++   data = df_clean,
++   FUN = function(x) {
++     c(
++       Mean = mean(x),
++       SD = sd(x),
++       SEM = sd(x) / sqrt(length(x)),
++       N = length(x)
++     )
++   }
++ )
+> 
+> mean_df <- data.frame(
++   Concentration = mean_data$Concentration,
++   Mean = mean_data$Absorbance[, "Mean"],
++   SD = mean_data$Absorbance[, "SD"],
++   SEM = mean_data$Absorbance[, "SEM"],
++   N = mean_data$Absorbance[, "N"]
++ )
+> 
+> 
+> # 5. CALCULATE LINEAR REGRESSION
+> 
+> # Fit using all 25 remaining individual measurements
+> model <- lm(
++   Absorbance ~ Concentration,
++   data = df_clean
++ )
+> 
+> model_summary <- summary(model)
+> 
+> slope <- unname(coef(model)[2])
+> intercept <- unname(coef(model)[1])
+> 
+> r_squared <- model_summary$r.squared
+> 
+> # Molar absorptivity (1 cm cuvette)
+> epsilon <- slope / 1.00
+> 
+> 
+> # ============================================================
+> # 6. GENERATE CALIBRATION CURVE
+> # ============================================================
+> 
+> plot(
++   mean_df$Concentration,
++   mean_df$Mean,
++   pch = 19,
++   col = "blue",
++   cex = 1.0,
++   main = "Calibration Curve of Known Aspartame Concentrations",
++   xlab = "Aspartame Concentration (M)",
++   ylab = "Mean Absorbance",
++   xlim = c(0, 0.011),
++   ylim = c(0, 1.2)
++ )
+> 
+> # Add regression line
+> abline(
++   model,
++   col = "red",
++   lwd = 2
++ )
+> 
+> # Add SEM error bars
+> arrows(
++   x0 = mean_df$Concentration,
++   y0 = mean_dfMean-meandfSEM,
++   x1 = mean_df$Concentration,
++   y1 = mean_dfMean+meandfSEM,
++   code = 3,
++   angle = 90,
++   length = 0.05,
++   col = "black",
++   lwd = 1.5
++ )
+Error: object 'mean_dfMean' not found
+> 
+> # Display regression equation and R²
+> legend(
++   "topleft",
++   legend = c(
++     sprintf("A = %.2fC + %.4f", slope, intercept),
++     sprintf("R² = %.4f", r_squared)
++   ),
++   bty = "n",
++   cex = 0.9
++ )
+> 
+> # Add grid
+> grid()
+> 
+> 
+> # ============================================================
+> # 7. PRINT CALIBRATION RESULTS
+> # ============================================================
+> 
+> cat("\n=== CALIBRATION RESULTS ===\n")
+
+=== CALIBRATION RESULTS ===
+> 
+> cat(sprintf("Slope: %.4f M^-1\n", slope))
+Slope: 87.9423 M^-1
+> cat(sprintf("Intercept: %.5f\n", intercept))
+Intercept: 0.10924
+> cat(sprintf("R²: %.5f\n", r_squared))
+R²: 0.97496
+> 
+> cat(sprintf(
++   "Molar Absorptivity: %.4f M^-1 cm^-1\n",
++   epsilon
++ ))
+Molar Absorptivity: 87.9423 M^-1 cm^-1
+> 
+> cat("\n=== MEAN ABSORBANCE AND SEM ===\n")
+
+=== MEAN ABSORBANCE AND SEM ===
+> print(mean_df)
+  Concentration      Mean          SD         SEM N
+1         5e-04 0.1207500 0.031330230 0.015665115 4
+2         1e-03 0.1792500 0.056706114 0.028353057 4
+3         2e-03 0.2965000 0.056906356 0.028453178 4
+4         4e-03 0.5005000 0.028219379 0.014109689 4
+5         6e-03 0.6726667 0.005859465 0.003382964 3
+6         8e-03 0.8356667 0.010016653 0.005783117 3
+7         1e-02 0.9293333 0.010066446 0.005811865 3
+> 
+> 
+> # ============================================================
+> # 8. ENTER EQUAL SWEETENER PACKET DATA
+> # ============================================================
+> 
+> # Three independent Equal packet absorbances
+> packet_absorbance <- c(
++   0.449,
++   0.452,
++   0.432
++ )
+> 
+> # Total Equal sweetener concentration in each sample
+> # 6.25 mg total sweetener per mL
+> sweetener_mg_per_mL <- 6.25
+> 
+> # Molecular weight of aspartame (g/mol)
+> MW_aspartame <- 294.3
+> 
+> 
+> # ============================================================
+> # 9. CALCULATE ASPARTAME CONTENT FOR EACH PACKET
+> # ============================================================
+> 
+> # Beer-Lambert calibration:
+> # A = slope * C + intercept
+> #
+> # Therefore:
+> # C = (A - intercept) / slope
+> 
+> packet_concentration_M <- (
++   packet_absorbance - intercept
++ ) / slope
+> 
+> 
+> # Convert aspartame concentration from M to mg/mL
+> #
+> # mol/L * g/mol = g/L
+> # g/L is numerically equivalent to mg/mL
+> 
+> packet_aspartame_mg_per_mL <- (
++   packet_concentration_M * MW_aspartame
++ )
+> 
+> 
+> # Calculate mg aspartame per g total sweetener
+> #
+> # (mg aspartame / mL) / (mg sweetener / mL)
+> # multiplied by 1000 mg/g
+> 
+> packet_mg_per_g <- (
++   packet_aspartame_mg_per_mL /
++   sweetener_mg_per_mL
++ ) * 1000
+> 
+> 
+> # 10. CREATE PACKET RESULTS TABLE
+> 
+> packet_results <- data.frame(
++   Packet = c("Packet 1", "Packet 2", "Packet 3"),
++   Absorbance = packet_absorbance,
++   Aspartame_Concentration_M = packet_concentration_M,
++   Aspartame_mg_per_g = packet_mg_per_g
++ )
+> 
+> cat("\n=== INDIVIDUAL EQUAL PACKET RESULTS ===\n")
+
+=== INDIVIDUAL EQUAL PACKET RESULTS ===
+> print(packet_results)
+    Packet Absorbance Aspartame_Concentration_M Aspartame_mg_per_g
+1 Packet 1      0.449               0.003863495           181.9242
+2 Packet 2      0.452               0.003897608           183.5306
+3 Packet 3      0.432               0.003670186           172.8217
+> 
+> 
+> # ============================================================
+> # 11. CALCULATE AVERAGE ASPARTAME CONTENT
+> # ============================================================
+> 
+> # Mean mg/g
+> mean_mg_per_g <- mean(packet_mg_per_g)
+> 
+> # Standard deviation
+> sd_mg_per_g <- sd(packet_mg_per_g)
+> 
+> # Standard error of the mean
+> sem_mg_per_g <- (
++   sd_mg_per_g / sqrt(length(packet_mg_per_g))
++ )
+> 
+> 
+> # ============================================================
+> # 12. PRINT FINAL RESULTS
+> # ============================================================
+> 
+> cat("\n=== FINAL EQUAL PACKET RESULTS ===\n")
+
+=== FINAL EQUAL PACKET RESULTS ===
+> 
+> cat(sprintf(
++   "Average Aspartame Content: %.4f mg/g\n",
++   mean_mg_per_g
++ ))
+Average Aspartame Content: 179.4255 mg/g
+> 
+> cat(sprintf(
++   "Standard Deviation: %.4f mg/g\n",
++   sd_mg_per_g
++ ))
+Standard Deviation: 5.7752 mg/g
+> 
+> cat(sprintf(
++   "Standard Error of Mean: %.4f mg/g\n",
++   sem_mg_per_g
++ ))
+Standard Error of Mean: 3.3343 mg/g
+> 
+> cat(sprintf(
++   "Final Result: %.4f +/- %.4f mg/g (Mean +/- SEM)\n",
++   mean_mg_per_g,
++   sem_mg_per_g
++ ))
+Final Result: 179.4255 +/- 3.3343 mg/g (Mean +/- SEM)
+
